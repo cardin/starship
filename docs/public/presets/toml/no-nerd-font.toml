@@ -1,18 +1,60 @@
-[battery]
-full_symbol = "• "
-charging_symbol = "⇡ "
-discharging_symbol = "⇣ "
-unknown_symbol = "❓ "
-empty_symbol = "❗ "
+format = """
+$os\
+$username\
+$hostname\
+$localip\
+$directory\
+$git_branch\
+$git_status\
+$java\
+$nodejs\
+$python\
+$docker_context\
+$conda\
+$jobs\
+$time\
+$cmd_duration\
+$memory_usage\
+$line_break$character"""
 
-[erlang]
-symbol = "ⓔ "
+[os]
+disabled = false
+
+[username]
+show_always = true
+
+[localip]
+# by default only shows on SSH. Continuation of hostname
+disabled = false
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = false
+
+[directory.substitutions]
+"/mnt/c" = "C: "
+"/mnt/d" = "D: "
 
 [nodejs]
 symbol = "[⬢](bold green) "
+version_format = "${major}"
 
-[pulumi]
-symbol = "🧊 "
+[java]
+version_format = "${major}"
 
-[typst]
-symbol = "t "
+[python]
+version_format = "${major}.${minor}"
+
+[jobs]
+number_threshold = 1
+
+[time]
+disabled = false
+time_format = "%R"
+
+[cmd_duration]
+min_time = 1000
+
+[memory_usage]
+disabled = false
