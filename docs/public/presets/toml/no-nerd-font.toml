@@ -1,9 +1,11 @@
+# For remote SSH where the users might not have Nerd Fonts.
+# Linux only (not WSL)
+
 format = """
-$os\
 $username\
 $hostname\
-$localip\
-$directory\
+$os\
+📁 $directory\
 $git_branch\
 $git_status\
 $java\
@@ -17,24 +19,13 @@ $cmd_duration\
 $memory_usage\
 $line_break$character"""
 
-[os]
-disabled = false
-
 [username]
 show_always = true
 
-[localip]
-# by default only shows on SSH. Continuation of hostname
+[os]
 disabled = false
-
-[directory]
-truncation_length = 3
-truncation_symbol = "…/"
-truncate_to_repo = false
-
-[directory.substitutions]
-"/mnt/c" = "C: "
-"/mnt/d" = "D: "
+style = "bold dimmed green"
+format = "[$symbol$version]($style) "
 
 [nodejs]
 symbol = "[⬢](bold green) "

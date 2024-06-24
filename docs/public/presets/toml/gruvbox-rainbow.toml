@@ -5,7 +5,6 @@ format = """
 $os\
 $username\
 $hostname\
-$localip\
 [](bg:color_yellow fg:color_orange)\
 $directory\
 [](fg:color_yellow bg:color_aqua)\
@@ -43,14 +42,12 @@ color_yellow = '#d79921'
 [os]
 disabled = false
 style = "bg:color_orange fg:color_fg0"
-format = "[$symbol ]($style)"
+format = "[$symbol $version ]($style)"
 
 [os.symbols]
 Windows = ""
 Ubuntu = ""
-Alpine = ""
 CentOS = ""
-Debian = "󰣚"
 Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
 
@@ -66,19 +63,12 @@ ssh_symbol = "󰢩"
 style = "bg:color_orange fg:color_fg0"
 format = "[$ssh_symbol $hostname ]($style)"
 
-[localip]
-# by default only shows on SSH. Continuation of hostname
-disabled = false
-style = "bg:color_orange fg:color_fg0"
-format = "[󱦂 $localipv4 ]($style)"
-
 [directory]
 style = "fg:color_fg0 bg:color_yellow"
 read_only_style = "fg:color_red bg:color_yellow"
 format = "[ $path ]($style)[$read_only]($read_only_style)"
 truncation_length = 3
 truncation_symbol = "…/"
-truncate_to_repo = false
 read_only = "󰌾 "
 
 [directory.substitutions]
