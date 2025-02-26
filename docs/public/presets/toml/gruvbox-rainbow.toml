@@ -1,15 +1,26 @@
+# Design Philosophy:
+# - Lazy to debug formatting
+# - Lazy to test colors
+# - Easier to just use an existing color scheme and design
+#
+# To install:
+# wget https://raw.githubusercontent.com/cardin/starship/refs/heads/mod/docs/public/presets/toml/gruvbox-rainbow.toml -O $STARSHIP_CONFIG
+
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[](color_orange)\
+[](color_bg1)\
 $os\
+[](fg:prev_fg bg:color_orange)\
 $username\
-[](bg:color_yellow fg:color_orange)\
+$hostname\
+[](fg:prev_bg bg:color_yellow)\
 $directory\
-[](fg:color_yellow bg:color_aqua)\
+[](fg:prev_bg bg:color_aqua)\
 $git_branch\
+$git_commit\
 $git_status\
-[](fg:color_aqua bg:color_blue)\
+[](fg:prev_bg bg:color_blue)\
 $c\
 $rust\
 $golang\
@@ -19,12 +30,15 @@ $java\
 $kotlin\
 $haskell\
 $python\
-[](fg:color_blue bg:color_bg3)\
+[](fg:prev_bg bg:color_bg3)\
 $docker_context\
 $conda\
-[](fg:color_bg3 bg:color_bg1)\
+$jobs\
+[](fg:prev_bg bg:color_bg1)\
 $time\
-[ ](fg:color_bg1)\
+$cmd_duration\
+$memory_usage\
+[ ](fg:prev_bg)\
 $line_break$character"""
 
 palette = 'gruvbox_dark'
@@ -43,120 +57,139 @@ color_yellow = '#d79921'
 
 [os]
 disabled = false
-style = "bg:color_orange fg:color_fg0"
+style = "bg:prev_bg fg:prev_bg"
+format = "[$symbol ]($style)"
 
 [os.symbols]
-Windows = "󰍲"
-Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
-Macos = "󰀵"
-Manjaro = ""
-Linux = "󰌽"
-Gentoo = "󰣨"
-Fedora = "󰣛"
-Alpine = ""
-Amazon = ""
-Android = ""
-Arch = "󰣇"
-Artix = "󰣇"
-EndeavourOS = ""
-CentOS = ""
-Debian = "󰣚"
-Redhat = "󱄛"
-RedHatEnterprise = "󱄛"
-Pop = ""
+Windows = "[](fg:blue bg:prev_fg)"
+Ubuntu = "[](fg:yellow bg:prev_fg)"
+SUSE = "[](fg:green bg:prev_fg)"
+Raspbian = "[󰐿](fg:red bg:prev_fg)"
+Mint = "[󰣭](fg:green bg:prev_fg)"
+Macos = "[󰀵](fg:white bg:prev_fg)"
+Manjaro = "[](fg:green bg:prev_fg)"
+Linux = "[󰌽](fg:white bg:prev_fg)"
+Gentoo = "[󰣨](fg:white bg:prev_fg)"
+Fedora = "[󰣛](fg:red bg:prev_fg)"
+Alpine = "[](fg:cyan bg:prev_fg)"
+Amazon = "[](fg:yellow bg:prev_fg)"
+Android = "[](fg:green bg:prev_fg)"
+Arch = "[󰣇](fg:blue bg:prev_fg)"
+Artix = "[󰣇](fg:blue bg:prev_fg)"
+EndeavourOS = "[](fg:purple bg:prev_fg)"
+CentOS = "[](fg:blue bg:prev_fg)"
+Debian = "[󰣚](fg:red bg:prev_fg)"
+Redhat = "[󱄛](fg:red bg:prev_fg)"
+RedHatEnterprise = "[󱄛](fg:red bg:prev_fg)"
+Pop = "[](fg:cyan bg:prev_fg)"
 
 [username]
-show_always = true
-style_user = "bg:color_orange fg:color_fg0"
-style_root = "bg:color_orange fg:color_fg0"
-format = '[ $user ]($style)'
+# by default only shows on SSH
+style_user = "bg:prev_bg fg:color_fg0"
+style_root = "bg:prev_bg fg:color_fg0"
+format = '[  $user ]($style)'
+
+[hostname]
+# by default only shows on SSH
+ssh_symbol = ""
+style = "fg:prev_fg bg:prev_bg"
+format = "[$ssh_symbol $hostname ]($style)"
 
 [directory]
-style = "fg:color_fg0 bg:color_yellow"
-format = "[ $path ]($style)"
+style = "fg:color_fg0 bg:prev_bg"
+read_only_style = "fg:color_red bg:prev_bg"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
 truncation_length = 3
 truncation_symbol = "…/"
-
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Developer" = "󰲋 "
+read_only = "󰌾 "
 
 [git_branch]
 symbol = ""
-style = "bg:color_aqua"
-format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+style = "fg:color_fg0 bg:prev_bg"
+format = '[ $symbol $branch ]($style)'
+
+[git_commit]
+style = "fg:prev_fg bg:prev_bg"
+format = "[($tag)]($style) "	
 
 [git_status]
-style = "bg:color_aqua"
-format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[($all_status$ahead_behind )]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ](fg:color_fg0 bg:prev_bg)' # bug, must set explicitly
 
 [c]
 symbol = " "
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [rust]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [golang]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [php]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [java]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [kotlin]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [haskell]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version) ]($style)'
 
 [python]
 symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $version)( $virtualenv) ]($style)' 
 
 [docker_context]
 symbol = ""
-style = "bg:color_bg3"
-format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $context) ]($style)'
 
 [conda]
-style = "bg:color_bg3"
-format = '[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'
+symbol = ""
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = '[ $symbol( $environment) ]($style)'
+
+[jobs]
+symbol = "󰆅"
+style = "fg:color_fg0 bg:prev_bg" # fg redefined, as prev module may not exist
+format = "[ $symbol( $number) ]($style)"
 
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:color_bg1"
-format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+style = "fg:color_fg0 bg:prev_bg"
+format = '[  $time ]($style)'
 
-[line_break]
+[cmd_duration]
+style = "fg:prev_fg bg:prev_bg"
+format = "[ $duration ]($style)"
+
+[memory_usage]
+symbol = "󰍛"
+style = "fg:bold color_red bg:prev_bg"
+format = "[$symbol ${ram} ]($style)"
 disabled = false
 
 [character]
