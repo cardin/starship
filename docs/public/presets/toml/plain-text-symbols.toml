@@ -23,7 +23,9 @@ continuation_prompt = "[.](bright-black) "
     vimcmd_replace_one_symbol = "[<](bold purple)"
 
 [git_commit]
+    format = "[($tag)]($style) "
     tag_symbol = " tag "
+    tag_disabled = false
 
 [git_status]
     ahead = ">"
